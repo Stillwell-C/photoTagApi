@@ -4,7 +4,6 @@ import Map from '../models/Map'
 const router = Router()
 
 router.get('/', async (req: Request, res: Response) => {
-
     const mapData = await Map.find().sort("mapName").lean().exec()
 
     if (!mapData) {
