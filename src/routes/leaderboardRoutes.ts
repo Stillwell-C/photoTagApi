@@ -16,26 +16,26 @@ interface LeaderDataObj {
 const router = Router()
 
 router.get('/', async (req: Request, res: Response) => {
-    const mapNames = await Map.find().sort("mapName").select('mapName').lean().exec()
+    const maps = await Map.find().sort("mapName").select('mapName').lean().exec()
 
     const leaderData: LeaderDataObj = {}
-    for (const { mapName } of mapNames) {
-        const mapLeaderData = await Leaderboard.find({"mapName": mapName}).sort({'seconds': 1, 'createdAt': 1}).limit(5).exec()
+    for (const singleMap of maps) {
+        const mapLeaderData = await Leaderboard.find({mapID: singleMap._id}).sort({'seconds': 1, 'createdAt': 1}).limit(5).exec()
 
-        leaderData[mapName] = mapLeaderData
+        leaderData[singleMap.mapName] = mapLeaderData
     }
-
+    
     res.status(200).json(leaderData)
 })
 
 router.post('/', async (req: Request, res: Response) => {
-    const {playerName, seconds, timer, mapName} = req?.body
+    const {playerName, seconds, timer, mapID} = req?.body
 
-    if (!playerName || !seconds || !timer || !mapName) {
-        return res.status(400).json({message: "Request must include a playerName, seconds, timer, and mapName."})
+    if (!playerName || !seconds || !timer || !mapID) {
+        return res.status(400).json({message: "Request must include a playerName, seconds, timer, and mapID."})
     }
 
-    await Leaderboard.create({playerName, seconds, timer, mapName})
+    await Leaderboard.create({playerName, seconds, timer, mapID})
 
     res.status(201).json({message: "Entry successfully created."})
 })
