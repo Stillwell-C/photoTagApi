@@ -1,4 +1,5 @@
 import {Router, Request, Response} from 'express'
+import mongoose from 'mongoose'
 import Map from '../models/Map'
 
 const router = Router()
@@ -26,6 +27,12 @@ router.get('/frontPage', async (req: Request, res: Response) => {
 
 router.get('/:mapID', async (req: Request, res: Response) => {
     const mapID = req?.params?.mapID
+
+    const idCheck = mongoose.isValidObjectId(mapID)
+
+    if (!idCheck) {
+        return res.status(404).json({ message: "Invalid map ID."})
+    }
 
     const mapData = await Map.findById(mapID).lean().exec()
 
