@@ -1,17 +1,17 @@
-import mongoose, {Document} from "mongoose";
+import mongoose, {Document, Types} from "mongoose";
 
 export interface Leaderboard extends Document {
     playerName: string, 
     seconds: number, 
     timer: string, 
-    mapName: string
+    mapID: Types.ObjectId
 }
 
 const leaderboardSchema = new mongoose.Schema<Leaderboard>({
     playerName: {type: String, required: true},
     seconds: {type: Number, required: true},
     timer: {type: String, required: true},
-    mapName: {type: String, required: true}
+    mapID: {type: mongoose.Schema.Types.ObjectId, required: true}
 }, {
     timestamps: true
 })
