@@ -10,7 +10,8 @@ interface Player {
 }
 
 interface LeaderDataObj {
-    [key: string] : Player[] | any
+    mapName: string,
+    leaderData: Player[] | any
 }
 
 const router = Router()
@@ -18,11 +19,11 @@ const router = Router()
 router.get('/', async (req: Request, res: Response) => {
     const maps = await Map.find().sort("mapName").select('mapName').lean().exec()
 
-    const leaderData: LeaderDataObj = {}
+    const leaderData: LeaderDataObj[] = []
     for (const singleMap of maps) {
         const mapLeaderData = await Leaderboard.find({mapID: singleMap._id}).sort({'seconds': 1, 'createdAt': 1}).limit(5).exec()
 
-        leaderData[singleMap.mapName] = mapLeaderData
+        leaderData.push({ mapName: singleMap.mapName, leaderData: mapLeaderData})
     }
     
     res.status(200).json(leaderData)
