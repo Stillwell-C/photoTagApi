@@ -1,5 +1,7 @@
 const allowedOrigins = [
-    'http://localhost:3000'
-]
+  "photo-tag.vercel.app",
+  "https://photo-tag.vercel.app/",
+  "http://photo-tag.vercel.app/",
+];
 
-export default allowedOrigins
+export default allowedOrigins;
