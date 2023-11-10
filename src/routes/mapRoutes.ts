@@ -23,7 +23,7 @@ router.get("/frontPage", async (req: Request, res: Response) => {
   //     .lean()
   //     .exec();
 
-  const mapData = await pool.query("SELECT id, mapname, imgkey FROM maps");
+  const mapData = await pool.query("SELECT map_id, mapname, imgkey FROM maps");
 
   if (!mapData) {
     return res.status(400).json({ message: "No map data found." });
@@ -46,7 +46,9 @@ router.get("/:mapID", async (req: Request, res: Response) => {
   }
 
   //   const mapData = await Map.findById(mapID).lean().exec();
-  const mapData = await pool.query("SELECT * FROM maps WHERE id = $1", [mapID]);
+  const mapData = await pool.query("SELECT * FROM maps WHERE map_id = $1", [
+    mapID,
+  ]);
 
   if (!mapID) {
     return res.status(404).json({ message: "Map not found." });
