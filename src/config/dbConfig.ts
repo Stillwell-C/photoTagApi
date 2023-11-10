@@ -4,12 +4,10 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const connectionString = process.env.DATABASE_PRIVATE_URL;
+
 const pool: PoolType = new Pool({
-  user: "postgres",
-  password: process.env.PG_PASS,
-  host: "localhost",
-  port: 5432,
-  database: "photoTag",
+  connectionString,
 });
 
 export default pool;
